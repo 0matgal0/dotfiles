@@ -4,9 +4,10 @@ if !isdirectory(expand("~/.vim"))
   autocmd VimEnter * PlugInstall
 endif
 
-call plug#begin('~/.vim/plugged')                   | let g:plug_window = 'new'
+call plug#begin('~/.vim/plugged')                  | let g:plug_window = 'vnew'
 Plug 'kien/ctrlp.vim'                      | let g:ctrlp_working_path_mode = ''
-Plug 'mbbill/undotree'                        | let g:undotree_WindowLayout = 3
+Plug 'w0ng/vim-hybrid'
+Plug 'mbbill/undotree'                        | let g:undotree_WindowLayout = 1
 Plug 'ap/vim-css-color',             { 'for': ['html', 'xhtml', 'xml', 'css'] }
 Plug 'chrisbra/nrrwrgn'
 Plug 'tpope/vim-eunuch'
@@ -24,6 +25,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'scrooloose/syntastic'                  | let g:syntastic_enable_signs = 0
 Plug 'gregsexton/matchtag',        { 'for': ['html', 'xhtml', 'xml', 'jinja'] }
 Plug 'nanotech/jellybeans.vim'
+Plug 'nelstrom/vim-mac-classic-theme'
 Plug 'andrewradev/splitjoin.vim'
 call plug#end()
 
@@ -41,7 +43,7 @@ set nofoldenable foldmethod=indent
 set viminfo+=n~/.vim/viminfo
 set breakindent showbreak=..
 set clipboard=unnamedplus
-set t_ti= t_te= t_Co=256
+set t_ti= t_te= "t_Co=256
 set smarttab shiftround
 set ignorecase hlsearch
 set previewheight=0
@@ -72,7 +74,7 @@ command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_
       \ | diffthis | wincmd p | diffthis
 command! Scratch 5new Scratch | setl hid bt=nofile ft=markdown | exe 'norm G'
 
-set guioptions=c guicursor=a:blinkon0 guifont=Monospace\ 12
+set guioptions=c guicursor=a:blinkon0 guifont=Fira\ Mono\ Medium\ 13
 command! -bar -nargs=0 Bigger
       \ :let &guifont = substitute(&guifont,'\d\+$','\=submatch(0)+1','')
 command! -bar -nargs=0 Smaller
@@ -83,8 +85,6 @@ noremap <M-.> :Bigger<CR>
 set background=dark
 " if g:colors_name=='default'
 "   set background=light
-"   hi TabLine      NONE
-"   hi link TabLine TabLinefill
 "   hi Normal       cterm=none ctermbg=White ctermfg=Black
 "   hi Error        cterm=none ctermbg=Red   ctermfg=Black
 "   hi StatusLine   cterm=none ctermfg=White ctermbg=Black
@@ -95,14 +95,27 @@ set background=dark
 "   hi Type         cterm=none ctermfg=22
 "   hi Identifier   cterm=none ctermfg=24
 "   hi PreProc      cterm=none ctermfg=89
-
-"   " Match git diff colors
-"   hi diffFile     cterm=bold       gui=bold
-"   hi diffLine     ctermfg=DarkCyan guifg=#00AAAA
-"   hi diffAdded    ctermfg=Green    guifg=#55FF55
-"   hi diffRemoved  ctermfg=Red      guifg=#FF5555
 " endif
-colorscheme jellybeans
+
+function! SwitchBackground()
+  if &background == 'light'
+    colo jellybeans
+  else
+    colo mac_classic
+  endif
+endfunction
+command! SwitchBackground :call SwitchBackground()
+
+" colorscheme mac_classic
+set background=light
+hi Normal       ctermbg=white ctermfg=black
+hi TabLine      NONE
+hi link TabLine TabLinefill
+" Match git diff colors
+hi diffFile     cterm=bold         gui=bold
+hi diffLine     ctermfg=DarkCyan   guifg=DarkCyan
+hi diffAdded    ctermfg=DarkGreen  guifg=DarkGreen
+hi diffRemoved  ctermfg=DarkRed    guifg=DarkRed
 
 augroup AutoCmds
   au!
